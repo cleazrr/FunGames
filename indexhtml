@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Fun Games Value</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.gstatic.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://*.googleapis.com;">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Fun Games Value">
+    <meta property="og:description" content="Fun Games Official Values & Cosmic Trade Guide">
+    <meta property="og:image" content="https://i.imgur.com/myDdyeT.png">
+    <meta property="og:site_name" content="Fun Games Value">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Fun Games Value">
+    <meta name="twitter:description" content="Fun Games Official Values">
+    <meta name="twitter:image" content="https://i.imgur.com/myDdyeT.png">
+    <meta name="theme-color" content="#FF9D44">
+
+    <link rel="icon" type="image/png" href="https://i.imgur.com/myDdyeT.png">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        @property --spin-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        :root {
+            --bg-base: #050814;
+            --bg-surface: #0b1124;
+            --bg-card: #0f172a;
+            --bg-topbar: rgba(7, 11, 24, 0.85);
+            --bg-modal: #0e1629;
+            --overlay-dots: rgba(255, 255, 255, 0.12);
+            
+            --primary-orange: #FF9D44;
+            --primary-orange-hover: #ff851b;
+            --glow-orange: rgba(255, 157, 68, 0.25);
+            --glow-orange-strong: rgba(255, 157, 68, 0.45);
+            --accent-blue: #38bdf8;
+            --accent-purple: #c084fc;
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            
+            --badge-huge: #38bdf8;
+            --badge-titanic: #c084fc;
+            --badge-garg: #f472b6;
+            --badge-egg: #fbbf24;
+            --badge-normal: #cbd5e1;
+            --badge-other: #a3e635;
+            
+            --border-color: rgba(255, 157, 68, 0.25);
+            --border-light: rgba(255, 255, 255, 0.08);
+            --card-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.65);
+            --variant-bg: #090f20;
+            --variant-border: rgba(255, 255, 255, 0.07);
+            --input-bg: #070c1a;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-base: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-topbar: rgba(255, 255, 255, 0.9);
+            --bg-modal: #ffffff;
+            --overlay-dots: rgba(0, 0, 0, 0.05);
+            
+            --primary-orange: #f97316;
+            --primary-orange-hover: #ea580c;
+            --glow-orange: rgba(249, 115, 22, 0.15);
+            --glow-orange-strong: rgba(249, 115, 22, 0.3);
+            --accent-blue: #0284c7;
+            --accent-purple: #9333ea;
+            
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-dim: #94a3b8;
+            
+            --badge-huge: #0284c7;
+            --badge-titanic: #7e22ce;
+            --badge-garg: #be185d;
+            --badge-egg: #b45309;
+            --badge-normal: #475569;
+            --badge-other: #4d7c0f;
+            
+            --border-color: rgba(249, 115, 22, 0.25);
+            --border-light: rgba(0, 0, 0, 0.08);
+            --card-shadow: 0 10px 25px -4px rgba(148, 163, 184, 0.25);
+            --variant-bg: #f1f5f9;
+            --variant-border: rgba(0, 0, 0, 0.06);
+            --input-bg: #f8fafc;
+        }
+
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.07), transparent 40%),
+                radial-gradient(circle at 90% 15%, rgba(255, 157, 68, 0.08), transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(192, 132, 252, 0.06), transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background-color var(--transition);
+        }
+
+        .cosmic-bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            background: radial-gradient(1.5px 1.5px at 20px 30px, var(--overlay-dots), rgba(0,0,0,0)),
+                        radial-gradient(1.5px 1.5px at 80px 120px, rgba(255, 157, 68, 0.18), rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 140px 60px, rgba(56, 189, 248, 0.18), rgba(0,0,0,0));
+            background-repeat: repeat; background-size: 180px 180px; opacity: 0.7;
+        }
+
+        .topbar {
+            background: var(--bg-topbar);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 6%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            flex-wrap: wrap; gap: 12px;
+        }
+
+        .brand-container { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+        .brand {
+            font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 900;
+            color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 6px; text-decoration: none; transition: var(--transition);
+        }
+        .brand:hover { transform: scale(1.02); }
+
+        .brand-logo-icon {
+            width: 38px; height: 38px; object-fit: contain;
+            filter: drop-shadow(0 0 8px var(--glow-orange-strong)); margin-right: 4px; border-radius: 8px; padding: 2px;
+        }
+
+        .brand span { color: var(--primary-orange); }
+
+        .admin-btn {
+            background: rgba(255, 157, 68, 0.12);
+            border: 1px solid var(--border-color); color: var(--primary-orange);
+            font-weight: 800; padding: 8px 18px; border-radius: 20px; cursor: pointer;
+            transition: var(--transition); font-size: 0.82rem; letter-spacing: 0.8px;
+            text-transform: uppercase; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+        }
+        .admin-btn:hover {
+            background: var(--primary-orange); color: #fff;
+            box-shadow: 0 0 18px var(--glow-orange-strong); transform: translateY(-2px);
+        }
+        .admin-btn:active { transform: translateY(0) scale(0.95); }
+
+        .topbar-actions { display: flex; align-items: center; gap: 12px; }
+        .theme-toggle, .discord-link {
+            background: var(--variant-bg); border: 1px solid var(--border-light);
+            cursor: pointer; width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); text-decoration: none; flex-shrink: 0;
+        }
+        .theme-toggle:hover { transform: rotate(18deg) scale(1.08); border-color: var(--primary-orange); }
+        .theme-toggle:active, .discord-link:active { transform: scale(0.9); }
+        
+        .discord-link { background: rgba(88, 101, 242, 0.12); border-color: rgba(88, 101, 242, 0.3); }
+        .discord-link:hover { transform: scale(1.08); background: #5865F2; border-color: #5865F2; }
+        .theme-icon { width: 20px; height: 20px; fill: var(--primary-orange); transition: var(--transition); }
+        .discord-icon { width: 22px; height: 22px; fill: #5865F2; transition: var(--transition); }
+        .discord-link:hover .discord-icon { fill: #ffffff; }
+
+        .container {
+            padding: 30px 6% 60px; flex-grow: 1; width: 100%;
+            max-width: 1600px; margin: 0 auto; position: relative; z-index: 1;
+        }
+
+        .hero-controls {
+            display: flex; flex-direction: column; gap: 18px; margin-bottom: 32px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color); border-radius: var(--radius-lg);
+            padding: 20px 24px; box-shadow: var(--card-shadow);
+        }
+        .controls-top-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        
+        .search-box { position: relative; flex-grow: 1; width: 100%; }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: var(--text-muted); pointer-events: none; transition: var(--transition); }
+        .search-input {
+            width: 100%; background: var(--input-bg); border: 1px solid var(--border-light);
+            border-radius: 30px; padding: 12px 20px 12px 48px; color: var(--text-main);
+            font-size: 0.95rem; outline: none; transition: var(--transition);
+        }
+        .search-input:focus { border-color: var(--primary-orange); box-shadow: 0 0 14px var(--glow-orange); }
+
+        .category-bar {
+            display: flex; gap: 10px; overflow-x: auto; padding: 4px 2px 8px 2px;
+            scrollbar-width: none; transition: var(--transition); opacity: 1;
+            align-items: center; width: 100%;
+        }
+        .category-bar::-webkit-scrollbar { display: none; }
+
+        .category-btn {
+            background: var(--variant-bg); border: 1px solid var(--border-light); color: var(--text-muted);
+            padding: 9px 18px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;
+            cursor: pointer; white-space: nowrap; transition: var(--transition);
+            display: flex; align-items: center; gap: 8px; touch-action: manipulation; flex-shrink: 0;
+        }
+        .category-btn img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+        .category-btn:hover { border-color: var(--primary-orange); color: var(--text-main); transform: translateY(-1px); }
+        .category-btn:active { transform: scale(0.96); }
+        .category-btn.active {
+            background: var(--primary-orange); color: #ffffff;
+            border-color: var(--primary-orange); box-shadow: 0 4px 14px var(--glow-orange-strong);
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 20px; width: 100%; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 18px;
+            position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px;
+            box-shadow: var(--card-shadow); opacity: 0; transform: translateY(15px);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            animation: slideUp 0.35s ease forwards;
+        }
+        .card:hover {
+            transform: translateY(-4px); border-color: var(--primary-orange);
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65), 0 0 18px var(--glow-orange);
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-150%) skewX(-25deg); pointer-events: none; z-index: 10;
+        }
+        .card:hover::before { animation: cardShine 1.2s ease; }
+        
+        @keyframes cardShine { 100% { transform: translateX(250%) skewX(-25deg); } }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+        .card-title-group { display: flex; align-items: flex-start; gap: 12px; min-width: 0; flex: 1 1 160px; }
+        
+        .card-pet-image {
+            width: 52px; height: 52px; object-fit: contain; border-radius: 12px;
+            background: var(--variant-bg); border: 1px solid var(--border-light);
+            padding: 4px; flex-shrink: 0; transition: var(--transition);
+        }
+        .card:hover .card-pet-image { transform: scale(1.05); border-color: var(--primary-orange); }
+
+        .title-sub-wrap { display: flex; flex-direction: column; min-width: 0; gap: 6px; }
+        .card-name { 
+            font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 800; 
+            color: var(--text-main); letter-spacing: -0.2px; 
+            white-space: normal; word-break: break-word; line-height: 1.25;
+        }
+
+        .badges-wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .cat-tag-badge, .rarity-badge { font-size: 0.65rem; font-weight: 800; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; }
+        
+        .cat-huge { background: rgba(56, 189, 248, 0.15); color: var(--badge-huge); border: 1px solid rgba(56, 189, 248, 0.35); }
+        .cat-titanic { background: rgba(168, 85, 247, 0.15); color: var(--badge-titanic); border: 1px solid rgba(168, 85, 247, 0.35); }
+        .cat-gargantuan { background: rgba(236, 72, 153, 0.15); color: var(--badge-garg); border: 1px solid rgba(236, 72, 153, 0.35); }
+        .cat-egg { background: rgba(251, 191, 36, 0.15); color: var(--badge-egg); border: 1px solid rgba(251, 191, 36, 0.35); }
+        .cat-normal { background: rgba(148, 163, 184, 0.15); color: var(--badge-normal); border: 1px solid rgba(148, 163, 184, 0.25); }
+        .cat-other { background: rgba(163, 230, 53, 0.15); color: var(--badge-other); border: 1px solid rgba(163, 230, 53, 0.3); }
+
+        .rarity-exclusive { background: rgba(168, 85, 247, 0.15); color: var(--badge-titanic); border: 1px solid rgba(168, 85, 247, 0.4); }
+        .rarity-event { background: rgba(2, 132, 199, 0.18); color: var(--badge-huge); border: 1px solid rgba(2, 132, 199, 0.4); }
+        .rarity-secret { background: #18092e; color: #c084fc; border: 1px solid #9333ea; }
+        .rarity-celestial { background: rgba(3, 105, 161, 0.25); color: var(--badge-huge); border: 1px solid rgba(3, 105, 161, 0.5); }
+        .rarity-default { background: rgba(100, 116, 139, 0.2); color: var(--badge-normal); border: 1px solid rgba(100, 116, 139, 0.3); }
+
+        .card-demand {
+            font-size: 0.72rem; font-weight: 800; color: #ffffff;
+            background: linear-gradient(135deg, var(--primary-orange), #f59e0b);
+            padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center;
+            gap: 4px; letter-spacing: 0.3px; flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(255, 157, 68, 0.25);
+        }
+
+        .variants-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; z-index: 2; }
+        .variant-item {
+            background: var(--variant-bg); border: 1px solid var(--variant-border); padding: 8px 10px;
+            border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 2px;
+            transition: var(--transition); position: relative; overflow: hidden; min-width: 0;
+        }
+        
+        .v-label { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+        .v-value { font-size: 0.92rem; font-weight: 900; color: var(--text-main); word-break: break-word; overflow-wrap: anywhere; }
+        .v-value.na { color: var(--text-dim); font-weight: 600; font-size: 0.85rem; font-style: italic; }
+
+        .color-normal { color: var(--text-main); }
+        .color-golden {
+            background: linear-gradient(110deg, #f59e0b 0%, #fbbf24 35%, #ffffff 50%, #fbbf24 65%, #f59e0b 100%);
+            background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
+            color: transparent; animation: goldShine 2.5s linear infinite; font-weight: 900; display: inline-block;
+        }
+
+        @keyframes goldShine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .color-rainbow, .color-shiny-rainbow {
+            background: linear-gradient(90deg, #ffb7b2, #ffdac1, #e2f0cb, #b5ead7, #c7ceea, #f3c4fb, #ffb7b2);
+            background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
+            color: transparent; animation: movePastelRight 3.5s linear infinite; font-weight: 900; display: inline-block;
+        }
+
+        @keyframes movePastelRight { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+
+        .color-shiny {
+            background: conic-gradient(from var(--spin-angle), #fffdd0, #ffffff, #e9d5ff, #fffdd0, #ffffff, #e9d5ff, #fffdd0);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: spinShinyAngle 3s linear infinite; font-weight: 900; display: inline-block;
+            filter: drop-shadow(0 0 2px rgba(233, 213, 255, 0.4));
+        }
+
+        @keyframes spinShinyAngle { 0% { --spin-angle: 0deg; } 100% { --spin-angle: 360deg; } }
+
+        .color-shiny-golden {
+            background: conic-gradient(from var(--spin-angle), #fde047, #ffffff, #fef08a, #fde047);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: spinShinyAngle 3s linear infinite; font-weight: 900; display: inline-block;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1; text-align: center; padding: 60px 20px;
+            background: var(--bg-surface); border: 1px dashed var(--border-color);
+            border-radius: var(--radius-lg); color: var(--text-muted);
+        }
+        .empty-state svg { width: 48px; height: 48px; fill: var(--primary-orange); margin-bottom: 12px; opacity: 0.8; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 7, 16, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+            opacity: 0; transition: opacity 0.25s ease; padding: 16px;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal-content {
+            background: var(--bg-modal); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 24px; width: 100%; max-width: 620px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); transform: scale(0.95) translateY(10px); opacity: 0;
+            transition: transform 0.25s ease, opacity 0.25s ease; max-height: 90vh; overflow-y: auto;
+            display: flex; flex-direction: column;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+        
+        .admin-dashboard-content { max-width: 780px; }
+        .admin-toolbar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .admin-toolbar input { flex: 1; min-width: 200px; }
+        .admin-select { width: 160px; cursor: pointer; }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px; }
+        .modal-title { font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--primary-orange); display: flex; align-items: center; gap: 8px; }
+
+        .close-btn {
+            background: var(--variant-bg); border: 1px solid var(--border-light); color: var(--text-muted);
+            width: 34px; height: 34px; border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+            transition: var(--transition); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .close-btn:hover { color: #fff; background: var(--primary-orange); border-color: var(--primary-orange); }
+
+        .form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+        
+        .form-control {
+            background: var(--input-bg); border: 1px solid var(--border-light); color: var(--text-main);
+            padding: 10px 14px; border-radius: var(--radius-md); font-size: 0.92rem; outline: none; transition: var(--transition);
+        }
+        .form-control:focus { border-color: var(--primary-orange); box-shadow: 0 0 10px var(--glow-orange); }
+
+        .image-preview-box { width: 48px; height: 48px; border-radius: 8px; background: var(--variant-bg); border: 1px solid var(--border-light); padding: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+        .image-preview-box img { width: 100%; height: 100%; object-fit: contain; }
+
+        .drop-zone {
+            position: relative; border: 2px dashed var(--border-light);
+            border-radius: var(--radius-md); padding: 12px; background: var(--input-bg); transition: var(--transition);
+        }
+        .drop-zone.dragover { border-color: var(--primary-orange); background: rgba(255, 157, 68, 0.08); }
+        .drop-zone-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-modal); display: flex; align-items: center; justify-content: center;
+            color: var(--primary-orange); font-weight: 800; font-size: 1.05rem;
+            border-radius: var(--radius-md); opacity: 0; pointer-events: none; transition: var(--transition); z-index: 10;
+        }
+        .drop-zone.dragover .drop-zone-overlay { opacity: 1; }
+
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; border-top: 1px solid var(--border-light); padding-top: 18px; flex-wrap: wrap; }
+        
+        .btn { padding: 9px 18px; border-radius: 20px; font-weight: 700; cursor: pointer; border: none; transition: var(--transition); font-size: 0.88rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0; }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary { background: var(--primary-orange); color: #fff; box-shadow: 0 2px 10px var(--glow-orange); }
+        .btn-primary:hover { background: var(--primary-orange-hover); }
+        .btn-secondary { background: var(--variant-bg); color: var(--text-main); border: 1px solid var(--border-light); }
+        .btn-danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        .admin-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; max-height: 380px; overflow-y: auto; padding-right: 6px; }
+        .admin-list-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: var(--variant-bg); padding: 12px 16px; border-radius: var(--radius-md); 
+            border: 1px solid var(--border-light); transition: var(--transition); gap: 14px; 
+        }
+        .admin-item-left { display: flex; align-items: center; gap: 14px; flex-grow: 1; overflow: hidden; }
+        .admin-item-img { 
+            width: 42px; height: 42px; border-radius: 8px; object-fit: contain; 
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-light); padding: 2px;
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            font-size: 0.6rem; color: var(--text-muted); text-align: center;
+        }
+        .admin-item-details { display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+        .admin-list-title { font-weight: 800; color: var(--text-main); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .admin-list-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: flex; gap: 8px; }
+        .admin-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+        .error-text { color: #ef4444; font-size: 0.85rem; margin-top: 6px; display: none; font-weight: 600; }
+        .two-col-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 157, 68, 0.35); border-radius: 4px; }
+
+        @media (max-width: 680px) {
+            .topbar { padding: 12px 4%; }
+            .brand { font-size: 1.35rem; }
+            .brand-logo-icon { width: 32px; height: 32px; }
+            .admin-btn { padding: 6px 12px; font-size: 0.75rem; }
+            .container { padding: 18px 4% 40px; }
+            .hero-controls { padding: 16px; margin-bottom: 24px; gap: 14px; }
+            .search-input { padding: 11px 16px 11px 42px; font-size: 0.9rem; }
+            .two-col-grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 18px; }
+            .admin-list-item { flex-direction: column; align-items: flex-start; }
+            .admin-item-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+            .modal-actions { flex-direction: column-reverse; gap: 8px; }
+            .modal-actions .btn { width: 100%; }
+            .admin-toolbar { flex-direction: column; }
+            .admin-select { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cosmic-bg-overlay"></div>
+
+    <header class="topbar">
+        <div class="brand-container">
+            <a href="#" class="brand">
+                <img class="brand-logo-icon" src="https://i.imgur.com/myDdyeT.png" alt="Cosmic Logo">
+                Fun Games <span>Value</span>
+            </a>
+            <button class="admin-btn" id="openAdminBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.81z"/></svg>
+                <span id="adminBtnText">Admin Login</span>
+            </button>
+        </div>
+        
+        <div class="topbar-actions">
+            <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle Theme">
+                <svg class="theme-icon" id="themeIcon" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+            <a href="https://discord.gg/kgYtvRd4ph" class="discord-link" target="_blank" rel="noopener noreferrer" title="Join Discord">
+                <svg class="discord-icon" viewBox="0 0 127.14 96.36">
+                    <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-19.32-72.12ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.2,46,96.09,53,91.08,65.69,84.69,65.69Z"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="hero-controls">
+            <div class="controls-top-row">
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search pet values..." autocomplete="off" maxlength="100">
+                    <svg class="search-icon" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="category-bar" id="categoryBar">
+                <button class="category-btn active" data-category="ALL">All Items</button>
+                <button class="category-btn" data-category="Normal">
+                    <img src="https://static.wikia.nocookie.net/pet-simulator/images/1/1c/PS99_Cat.png/revision/latest?cb=20231202084913" alt="Normal"> Normal
+                </button>
+                <button class="category-btn" data-category="Huge">
+                    <img src="https://static.wikia.nocookie.net/pet-simulator/images/5/52/PS99_Huge_Cat.png/revision/latest?cb=20231203055553" alt="Huge"> Huge
+                </button>
+                <button class="category-btn" data-category="Titanic">
+                    <img src="https://static.wikia.nocookie.net/pet-simulator/images/a/ab/PS99_Titanic_Cat.png/revision/latest?cb=20231205081119" alt="Titanic"> Titanic
+                </button>
+                <button class="category-btn" data-category="Gargantuan">
+                    <img src="https://static.wikia.nocookie.net/pet-simulator/images/a/ab/PS99_Titanic_Cat.png/revision/latest?cb=20231205081119" alt="Gargantuan"> Gargantuan
+                </button>
+                <button class="category-btn" data-category="Egg">
+                    <img src="https://db.biggames.io/tab-icons/icon_egg.png" alt="Egg"> Egg
+                </button>
+            </div>
+        </div>
+
+        <div class="grid" id="cardContainer"></div>
+    </main>
+
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Admin Login</h2>
+                <button class="close-btn" type="button" data-close-modal="authModal">&times;</button>
+            </div>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail" class="form-control" placeholder="Enter admin email..." autocomplete="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" class="form-control" placeholder="Enter password..." autocomplete="current-password" required>
+                    <div class="error-text" id="authError">Access Denied: Invalid credentials.</div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal="authModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Login Securely</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="dashboardModal">
+        <div class="modal-content admin-dashboard-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.81z"/></svg>
+                    Database Dashboard
+                </h2>
+                <button class="close-btn" type="button" data-close-modal="dashboardModal">&times;</button>
+            </div>
+            
+            <div class="admin-toolbar">
+                <input type="text" id="adminSearch" class="form-control" placeholder="Search database entries..." maxlength="100">
+                <select id="adminCategory" class="form-control admin-select">
+                    <option value="ALL">All Categories</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Huge">Huge</option>
+                    <option value="Titanic">Titanic</option>
+                    <option value="Gargantuan">Gargantuan</option>
+                    <option value="Egg">Egg</option>
+                    <option value="Other">Other</option>
+                </select>
+                <button type="button" class="btn btn-danger" id="logoutAdminBtn" style="margin-left: auto;">Logout</button>
+            </div>
+
+            <div class="admin-list" id="adminPetList"></div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" data-close-modal="dashboardModal">Close Panel</button>
+                <button type="button" class="btn btn-primary" id="openCreatePetBtn">Create New Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="petFormModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="formTitle">Add Pet</h2>
+                <button class="close-btn" type="button" data-close-modal="petFormModal">&times;</button>
+            </div>
+            <form id="petDataForm">
+                <input type="hidden" id="editPetId" value="">
+                <div class="two-col-grid">
+                    <div class="form-group"><label for="petName">Pet Name</label><input type="text" id="petName" class="form-control" placeholder="e.g. Gargantuan Cat" maxlength="100" required></div>
+                    <div class="form-group"><label for="petDemand">Demand Rating</label><input type="text" id="petDemand" class="form-control" placeholder="e.g. 10/10" maxlength="30"></div>
+                    <div class="form-group" style="grid-column: 1 / -1;"><label for="petRarity">Rarity</label><input type="text" id="petRarity" class="form-control" placeholder="e.g. Exclusive, Event, Secret..." maxlength="50"></div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 6px;">
+                    <label for="petImageUrl">Direct Image URL</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <div class="image-preview-box" id="urlPreviewContainer">
+                            <img id="formUrlImagePreview" src="" alt="Preview" style="display:none;">
+                        </div>
+                        <input type="text" id="petImageUrl" class="form-control" placeholder="https://example.com/pet-image.png" style="flex-grow: 1;" maxlength="1000">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 6px;">
+                    <label>Alternative: Upload File or Drag & Drop Image</label>
+                    <div id="imageDropZone" class="drop-zone">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; position: relative; z-index: 2;">
+                            <div class="image-preview-box" id="previewContainer">
+                                <img id="formImagePreview" src="" alt="Preview" style="display:none;">
+                            </div>
+                            <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px; min-width: 180px;">
+                                <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" style="display: none;">
+                                <div style="display: flex; gap: 8px;">
+                                    <button type="button" class="btn btn-secondary" id="browseGalleryBtn" style="padding: 6px 14px; font-size: 0.8rem; flex-grow: 1;">Browse Gallery</button>
+                                    <button type="button" class="btn btn-danger" id="removeUploadBtn" style="padding: 6px 14px; font-size: 0.8rem;">Remove Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="drop-zone-overlay">Drop Image Here</div>
+                    </div>
+                    <input type="hidden" id="petImageUpload" value="">
+                </div>
+
+                <h3 style="margin: 16px 0 10px; font-size: 0.92rem; font-weight: 800; color: var(--primary-orange); border-bottom: 1px solid var(--border-light); padding-bottom: 6px;">Variant Trade Values</h3>
+                <div class="two-col-grid">
+                    <div class="form-group"><label for="valNormal" class="color-normal">Normal</label><input type="text" id="valNormal" class="form-control" placeholder="Value" maxlength="50"></div>
+                    <div class="form-group"><label for="valGolden" class="color-golden">Golden</label><input type="text" id="valGolden" class="form-control" placeholder="Value" maxlength="50"></div>
+                    <div class="form-group"><label for="valRainbow" class="color-rainbow">Rainbow</label><input type="text" id="valRainbow" class="form-control" placeholder="Value" maxlength="50"></div>
+                    <div class="form-group"><label for="valShiny" class="color-shiny">Shiny</label><input type="text" id="valShiny" class="form-control" placeholder="Value" maxlength="50"></div>
+                    <div class="form-group"><label for="valShinyGolden" class="color-shiny-golden">Shiny Gold</label><input type="text" id="valShinyGolden" class="form-control" placeholder="Value" maxlength="50"></div>
+                    <div class="form-group"><label for="valShinyRainbow" class="color-shiny-rainbow">Shiny Rainbow</label><input type="text" id="valShinyRainbow" class="form-control" placeholder="Value" maxlength="50"></div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="backToDashBtn">Back</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            'use strict';
+
+            // Firebase Initialization
+            const firebaseConfig = {
+                apiKey: "AIzaSyCb0c6idorD75quKMTFTvwb3_hpwDN_qA0",
+                authDomain: "datastore-47380.firebaseapp.com",
+                databaseURL: "https://datastore-47380-default-rtdb.firebaseio.com",
+                projectId: "datastore-47380",
+                storageBucket: "datastore-47380.firebasestorage.app",
+                messagingSenderId: "343075624433",
+                appId: "1:343075624433:web:e4a32b57f5dd4bfde16050",
+                measurementId: "G-4RLK953ZYV"
+            };
+
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            const database = firebase.database();
+            const auth = firebase.auth();
+
+            // State Management
+            let petsDatabase = {};
+            let selectedCategory = "ALL";
+            let adminSearchText = "";
+            let adminCategoryFilter = "ALL";
+
+            // Variant Mappings
+            const variantConfig = [
+                { id: "normal", label: "Normal", colorClass: "color-normal" },
+                { id: "golden", label: "Golden", colorClass: "color-golden" },
+                { id: "rainbow", label: "Rainbow", colorClass: "color-rainbow" },
+                { id: "shiny", label: "Shiny", colorClass: "color-shiny" },
+                { id: "shinyGolden", label: "Shiny Gold", colorClass: "color-shiny-golden" },
+                { id: "shinyRainbow", label: "Shiny Rainbow", colorClass: "color-shiny-rainbow" }
+            ];
+
+            // Security & Utility Helper Functions
+            function escapeHTML(str) {
+                if (str === null || str === undefined) return "";
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function sanitizeUrl(url) {
+                if (!url) return "";
+                const trimmed = String(url).trim();
+                if (/^(https?:\/\/|data:image\/(png|jpeg|webp|gif);base64,)/i.test(trimmed)) {
+                    return trimmed;
+                }
+                return "";
+            }
+
+            function cleanKey(key) {
+                if (!key) return "";
+                return String(key).replace(/[.#$\[\]\/]/g, "");
+            }
+
+            function detectCategory(name) {
+                if (!name) return 'Other';
+                const lower = String(name).toLowerCase();
+                if (lower.includes('gargantuan')) return 'Gargantuan';
+                if (lower.includes('titanic')) return 'Titanic';
+                if (lower.includes('huge')) return 'Huge';
+                if (lower.includes('gift') || lower.includes('egg')) return 'Egg';
+                if (lower.includes('other')) return 'Other';
+                return 'Normal';
+            }
+
+            function getCategoryBadgeHTML(cat) {
+                const map = {
+                    'Huge': 'cat-huge',
+                    'Titanic': 'cat-titanic',
+                    'Gargantuan': 'cat-gargantuan',
+                    'Egg': 'cat-egg',
+                    'Other': 'cat-other'
+                };
+                const cls = map[cat] || 'cat-normal';
+                return `<span class="cat-tag-badge ${cls}">${escapeHTML(cat)}</span>`;
+            }
+
+            function getRarityBadgeHTML(rarityStr) {
+                if (!rarityStr) return `<span class="rarity-badge rarity-default">Unknown</span>`;
+                const lower = String(rarityStr).toLowerCase().trim();
+                const rarityClasses = {
+                    'exclusive': 'rarity-exclusive',
+                    'event': 'rarity-event',
+                    'secret': 'rarity-secret',
+                    'celestial': 'rarity-celestial'
+                };
+                const cls = rarityClasses[lower] || 'rarity-default';
+                return `<span class="rarity-badge ${cls}">${escapeHTML(rarityStr)}</span>`;
+            }
+
+            // Modal Controls
+            function openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) modal.classList.add('active');
+            }
+
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) modal.classList.remove('active');
+            }
+
+            // UI Render Functions
+            function renderUI() {
+                const container = document.getElementById('cardContainer');
+                const filterText = document.getElementById('searchInput').value.toLowerCase().trim();
+                container.innerHTML = ''; 
+
+                const keys = Object.keys(petsDatabase).filter(key => {
+                    const pet = petsDatabase[key];
+                    if (!pet || !pet.name) return false;
+
+                    const nameMatch = String(pet.name).toLowerCase().includes(filterText);
+                    if (selectedCategory === "ALL") return nameMatch;
+
+                    const cat = detectCategory(pet.name);
+                    return nameMatch && (cat === selectedCategory);
+                });
+
+                if (keys.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                            <h3 style="font-weight: 800; font-size: 1.15rem; margin-bottom: 6px;">No Pet Values Found</h3>
+                            <p style="font-size: 0.9rem;">Try refining your search query or changing active category filters.</p>
+                        </div>`;
+                    return;
+                }
+
+                keys.forEach((key, index) => {
+                    const pet = petsDatabase[key];
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.animationDelay = `${Math.min(index * 0.03, 0.3)}s`;
+
+                    const petCategory = detectCategory(pet.name);
+                    const categoryBadge = getCategoryBadgeHTML(petCategory);
+
+                    let petRarity = pet.rarity; 
+                    if (!petRarity || String(petRarity).trim() === '') {
+                        if (['Huge', 'Titanic', 'Gargantuan'].includes(petCategory)) {
+                            petRarity = 'Exclusive';
+                        }
+                    }
+                    const rarityBadge = getRarityBadgeHTML(petRarity);
+
+                    let variantsHTML = '<div class="variants-grid">';
+                    variantConfig.forEach(vConf => {
+                        const rawValue = pet.variants ? pet.variants[vConf.id] : "";
+                        const hasValue = rawValue !== undefined && rawValue !== "" && rawValue !== null;
+                        const safeValue = hasValue ? escapeHTML(rawValue) : "N/A";
+                        variantsHTML += `
+                            <div class="variant-item">
+                                <span class="v-label ${vConf.colorClass}">${vConf.label}</span>
+                                <span class="${hasValue ? 'v-value ' + vConf.colorClass : 'v-value na'}">${safeValue}</span>
+                            </div>`;
+                    });
+                    variantsHTML += '</div>';
+
+                    const safeImgUrl = sanitizeUrl(pet.image);
+                    const imageHTML = safeImgUrl 
+                        ? `<img class="card-pet-image" src="${escapeHTML(safeImgUrl)}" alt="${escapeHTML(pet.name)}" referrerpolicy="no-referrer">` 
+                        : '';
+
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                ${imageHTML}
+                                <div class="title-sub-wrap">
+                                    <h2 class="card-name" title="${escapeHTML(pet.name)}">${escapeHTML(pet.name)}</h2>
+                                    <div class="badges-wrap">
+                                        ${categoryBadge}
+                                        ${rarityBadge}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-demand">
+                                <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8c0-5.52-4.5-9.33-6.5-13.33zM12 20c-3.31 0-6-2.69-6-6 0-1.53.58-3.04 1.5-4.21.32.74.87 1.41 1.63 1.9 1.43.93 3.3.69 4.37-.58.42-.5.67-1.12.76-1.78.89 1.09 1.74 2.45 1.74 4.67 0 3.31-2.69 6-6 6z"/></svg>
+                                ${escapeHTML(pet.demand)}
+                            </div>
+                        </div>
+                        ${variantsHTML}
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            function renderAdminList() {
+                const listContainer = document.getElementById('adminPetList');
+                listContainer.innerHTML = '';
+                
+                const keys = Object.keys(petsDatabase).filter(key => {
+                    const pet = petsDatabase[key];
+                    if (!pet || !pet.name) return false;
+                    
+                    const matchSearch = String(pet.name).toLowerCase().includes(adminSearchText);
+                    const cat = detectCategory(pet.name);
+                    const matchCat = adminCategoryFilter === "ALL" || cat === adminCategoryFilter;
+                    
+                    return matchSearch && matchCat;
+                });
+
+                if (keys.length === 0) {
+                    listContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 30px;">No entries match your search.</p>';
+                    return;
+                }
+                
+                keys.forEach((key) => {
+                    const pet = petsDatabase[key];
+                    const item = document.createElement('div');
+                    item.className = 'admin-list-item';
+                    
+                    const safeImgUrl = sanitizeUrl(pet.image);
+                    const imgHtml = safeImgUrl 
+                        ? `<img src="${escapeHTML(safeImgUrl)}" class="admin-item-img">` 
+                        : `<div class="admin-item-img">No<br>Img</div>`;
+                    
+                    const cat = detectCategory(pet.name);
+                    const demandText = pet.demand || 'N/A';
+                    const safeKey = cleanKey(key);
+
+                    item.innerHTML = `
+                        <div class="admin-item-left">
+                            ${imgHtml}
+                            <div class="admin-item-details">
+                                <span class="admin-list-title" title="${escapeHTML(pet.name)}">${escapeHTML(pet.name)}</span>
+                                <span class="admin-list-meta">
+                                    <span style="color: var(--primary-orange)">${escapeHTML(cat)}</span> • Demand: ${escapeHTML(demandText)}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="admin-item-actions">
+                            <button type="button" class="btn btn-secondary action-edit" data-id="${escapeHTML(safeKey)}">Edit</button>
+                            <button type="button" class="btn btn-danger action-delete" data-id="${escapeHTML(safeKey)}">Delete</button>
+                        </div>`;
+                    listContainer.appendChild(item);
+                });
+            }
+
+            function openPetForm(id = "") {
+                closeModal('dashboardModal');
+                const safeId = cleanKey(id);
+                document.getElementById('editPetId').value = safeId;
+                
+                const pet = safeId ? petsDatabase[safeId] : { variants: {} };
+                document.getElementById('formTitle').innerText = safeId ? "Edit Pet Entry" : "Add New Pet Entry";
+                
+                document.getElementById('petName').value = pet.name || '';
+                document.getElementById('petDemand').value = pet.demand || '';
+                document.getElementById('petRarity').value = pet.rarity || '';
+                
+                const existingImg = pet.image || '';
+                if (existingImg.startsWith('data:image')) {
+                    document.getElementById('petImageUrl').value = '';
+                    document.getElementById('petImageUpload').value = existingImg;
+                    const previewEl = document.getElementById('formImagePreview');
+                    previewEl.src = sanitizeUrl(existingImg);
+                    previewEl.style.display = 'block';
+                    document.getElementById('formUrlImagePreview').style.display = 'none';
+                } else {
+                    document.getElementById('petImageUrl').value = existingImg;
+                    document.getElementById('petImageUpload').value = '';
+                    document.getElementById('formImagePreview').style.display = 'none';
+                    updateUrlPreview();
+                }
+
+                document.getElementById('valNormal').value = (pet.variants && pet.variants.normal) || '';
+                document.getElementById('valGolden').value = (pet.variants && pet.variants.golden) || '';
+                document.getElementById('valRainbow').value = (pet.variants && pet.variants.rainbow) || '';
+                document.getElementById('valShiny').value = (pet.variants && pet.variants.shiny) || '';
+                document.getElementById('valShinyGolden').value = (pet.variants && pet.variants.shinyGolden) || '';
+                document.getElementById('valShinyRainbow').value = (pet.variants && pet.variants.shinyRainbow) || '';
+                
+                document.getElementById('fileInput').value = '';
+                openModal('petFormModal');
+            }
+
+            function updateUrlPreview() {
+                const url = document.getElementById('petImageUrl').value.trim();
+                const imgEl = document.getElementById('formUrlImagePreview');
+                const safeUrl = sanitizeUrl(url);
+                if (safeUrl) {
+                    imgEl.src = safeUrl;
+                    imgEl.style.display = 'block';
+                } else {
+                    imgEl.src = '';
+                    imgEl.style.display = 'none';
+                }
+            }
+
+            function clearImageField() {
+                document.getElementById('petImageUpload').value = '';
+                document.getElementById('fileInput').value = '';
+                document.getElementById('formImagePreview').src = '';
+                document.getElementById('formImagePreview').style.display = 'none';
+            }
+
+            async function savePetData() {
+                if (!auth.currentUser) {
+                    alert("Unauthorized operation. Session expired.");
+                    return;
+                }
+
+                const rawId = document.getElementById('editPetId').value;
+                const id = rawId ? cleanKey(rawId) : database.ref('pets').push().key;
+                
+                const urlInput = sanitizeUrl(document.getElementById('petImageUrl').value.trim());
+                const uploadInput = sanitizeUrl(document.getElementById('petImageUpload').value.trim());
+                const finalImage = urlInput !== "" ? urlInput : uploadInput;
+
+                const petData = {
+                    name: document.getElementById('petName').value.trim().substring(0, 100) || "Unnamed Pet",
+                    demand: document.getElementById('petDemand').value.trim().substring(0, 30) || "N/A",
+                    rarity: document.getElementById('petRarity').value.trim().substring(0, 50) || "",
+                    image: finalImage,
+                    variants: {
+                        normal: document.getElementById('valNormal').value.trim().substring(0, 50),
+                        golden: document.getElementById('valGolden').value.trim().substring(0, 50),
+                        rainbow: document.getElementById('valRainbow').value.trim().substring(0, 50),
+                        shiny: document.getElementById('valShiny').value.trim().substring(0, 50),
+                        shinyGolden: document.getElementById('valShinyGolden').value.trim().substring(0, 50),
+                        shinyRainbow: document.getElementById('valShinyRainbow').value.trim().substring(0, 50)
+                    }
+                };
+                
+                try {
+                    await database.ref('pets/' + id).set(petData);
+                    closeModal('petFormModal');
+                    openModal('dashboardModal');
+                } catch (error) {
+                    alert("Failed to save pet entry: " + error.message);
+                }
+            }
+
+            async function deletePet(id) {
+                if (!auth.currentUser) {
+                    alert("Unauthorized operation.");
+                    return;
+                }
+                
+                const safeId = cleanKey(id);
+                if (!safeId) return;
+
+                if (confirm("Are you sure you want to delete this entry?")) {
+                    try {
+                        await database.ref('pets/' + safeId).remove();
+                    } catch (err) {
+                        alert("Delete failed: " + err.message);
+                    }
+                }
+            }
+
+            // Image File Drag & Drop Handling
+            function handleFiles(file) {
+                const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Invalid file format. Only PNG, JPEG, and WEBP allowed.');
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size exceeds maximum limit of 5MB.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let { width, height } = img;
+                        const MAX_SIZE = 250;
+
+                        if (width > height && width > MAX_SIZE) {
+                            height *= MAX_SIZE / width;
+                            width = MAX_SIZE;
+                        } else if (height > MAX_SIZE) {
+                            width *= MAX_SIZE / height;
+                            height = MAX_SIZE;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const dataUrl = canvas.toDataURL('image/webp', 0.85);
+                        document.getElementById('petImageUpload').value = dataUrl;
+                        
+                        const previewEl = document.getElementById('formImagePreview');
+                        previewEl.src = dataUrl;
+                        previewEl.style.display = 'block';
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Initialization & Event Listeners
+            function initEventListeners() {
+                // Global Modal Close Delegate
+                document.addEventListener('click', (e) => {
+                    const closeBtn = e.target.closest('[data-close-modal]');
+                    if (closeBtn) {
+                        closeModal(closeBtn.getAttribute('data-close-modal'));
+                    }
+                });
+
+                // Theme Toggle
+                const themeToggleBtn = document.getElementById('themeToggleBtn');
+                const themeIcon = document.getElementById('themeIcon');
+                const moonPath = "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z";
+                const sunPath = "M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z";
+
+                if (localStorage.getItem('theme') === 'light') {
+                    document.body.setAttribute('data-theme', 'light');
+                    themeIcon.innerHTML = `<path d="${sunPath}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>`;
+                }
+
+                themeToggleBtn.addEventListener('click', () => {
+                    if (document.body.getAttribute('data-theme') === 'light') {
+                        document.body.removeAttribute('data-theme');
+                        localStorage.setItem('theme', 'dark');
+                        themeIcon.innerHTML = `<path d="${moonPath}"></path>`;
+                    } else {
+                        document.body.setAttribute('data-theme', 'light');
+                        localStorage.setItem('theme', 'light');
+                        themeIcon.innerHTML = `<path d="${sunPath}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>`;
+                    }
+                });
+
+                // Category Buttons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        selectedCategory = btn.getAttribute('data-category');
+                        renderUI();
+                    });
+                });
+
+                // Search Inputs
+                document.getElementById('searchInput').addEventListener('input', renderUI);
+                document.getElementById('adminSearch').addEventListener('input', (e) => {
+                    adminSearchText = e.target.value.toLowerCase().trim();
+                    renderAdminList();
+                });
+                document.getElementById('adminCategory').addEventListener('change', (e) => {
+                    adminCategoryFilter = e.target.value;
+                    renderAdminList();
+                });
+
+                // Admin Buttons
+                document.getElementById('openAdminBtn').addEventListener('click', () => {
+                    if (auth.currentUser) {
+                        openModal('dashboardModal');
+                    } else {
+                        document.getElementById('adminEmail').value = '';
+                        document.getElementById('adminPassword').value = '';
+                        document.getElementById('authError').style.display = 'none';
+                        openModal('authModal');
+                    }
+                });
+
+                document.getElementById('logoutAdminBtn').addEventListener('click', () => {
+                    auth.signOut().then(() => closeModal('dashboardModal'));
+                });
+
+                document.getElementById('openCreatePetBtn').addEventListener('click', () => openPetForm(''));
+                document.getElementById('backToDashBtn').addEventListener('click', () => {
+                    closeModal('petFormModal');
+                    openModal('dashboardModal');
+                });
+
+                // Admin List Delegation (Edit / Delete)
+                document.getElementById('adminPetList').addEventListener('click', (e) => {
+                    const editBtn = e.target.closest('.action-edit');
+                    if (editBtn) {
+                        openPetForm(editBtn.getAttribute('data-id'));
+                        return;
+                    }
+                    const deleteBtn = e.target.closest('.action-delete');
+                    if (deleteBtn) {
+                        deletePet(deleteBtn.getAttribute('data-id'));
+                    }
+                });
+
+                // Admin Login Form
+                document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('adminEmail').value.trim();
+                    const pass = document.getElementById('adminPassword').value.trim();
+                    const errorElement = document.getElementById('authError');
+
+                    try {
+                        await auth.signInWithEmailAndPassword(email, pass);
+                        closeModal('authModal');
+                        openModal('dashboardModal');
+                    } catch (err) {
+                        errorElement.innerText = "Access Denied: Invalid credentials.";
+                        errorElement.style.display = 'block';
+                    }
+                });
+
+                // Pet Data Form Submit
+                document.getElementById('petDataForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    savePetData();
+                });
+
+                // File Upload / Drag & Drop
+                const dropZone = document.getElementById('imageDropZone');
+                const fileInput = document.getElementById('fileInput');
+
+                document.getElementById('browseGalleryBtn').addEventListener('click', () => fileInput.click());
+                document.getElementById('removeUploadBtn').addEventListener('click', clearImageField);
+                document.getElementById('petImageUrl').addEventListener('input', updateUrlPreview);
+
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+                    dropZone.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); }, false);
+                });
+
+                ['dragenter', 'dragover'].forEach(evt => {
+                    dropZone.addEventListener(evt, () => dropZone.classList.add('dragover'), false);
+                });
+
+                ['dragleave', 'drop'].forEach(evt => {
+                    dropZone.addEventListener(evt, () => dropZone.classList.remove('dragover'), false);
+                });
+
+                dropZone.addEventListener('drop', (e) => {
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) handleFiles(files[0]);
+                });
+
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files.length > 0) handleFiles(this.files[0]);
+                });
+
+                // Keyboard escape listener
+                window.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        closeModal('authModal');
+                        closeModal('dashboardModal');
+                        closeModal('petFormModal');
+                    }
+                });
+            }
+
+            // Firebase Auth State Listener
+            auth.onAuthStateChanged((user) => {
+                const btnText = document.getElementById('adminBtnText');
+                if (user) {
+                    if (btnText) btnText.textContent = 'Dashboard';
+                    renderAdminList();
+                } else {
+                    if (btnText) btnText.textContent = 'Admin Login';
+                    closeModal('dashboardModal');
+                    closeModal('petFormModal');
+                }
+            });
+
+            // Firebase Database Listener
+            database.ref('pets').on('value', (snapshot) => {
+                petsDatabase = snapshot.val() || {};
+                renderUI();
+                if (auth.currentUser) renderAdminList();
+            });
+
+            // Run Init
+            initEventListeners();
+        })();
+    </script>
+</body>
+</html>
